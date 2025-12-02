@@ -34,6 +34,7 @@ export default function RegisterPage() {
 
     /**
      * Maneja el envío del formulario de registro
+     * Guarda el usuario en Supabase Auth y en la tabla users
      * @param data - Datos del formulario validados
      */
     const onSubmit = async (data: RegisterFormData) => {
@@ -41,7 +42,8 @@ export default function RegisterPage() {
             setError(null)
             setLoading(true)
 
-            const { error } = await supabase.auth.signUp({
+            // 1. Crear usuario en Supabase Auth
+            const { data: authData, error: authError } = await supabase.auth.signUp({
                 email: data.email,
                 password: data.password,
                 options: {
@@ -51,9 +53,28 @@ export default function RegisterPage() {
                 },
             })
 
-            if (error) throw error
+            if (authError) throw authError
 
-            // Redirigir al usuario después del registro exitoso
+            // 2. Guardar datos del usuario en la tabla users
+            if (authData.user) {
+                const { error: dbError } = await supabase.from('users').insert([
+                    {
+                        user_id: authData.user.id,  // Relacionar con auth.users
+                        name_user: data.name,
+                        email_user: data.email,
+                        number_user: null, // Se puede actualizar después en el perfil
+                    },
+                ])
+
+                if (dbError) {
+                    console.error('Error al guardar en la base de datos:', dbError)
+                    // Mostrar alerta al usuario pero no bloquear el registro
+                    // El usuario ya está creado en Auth y puede iniciar sesión
+                    setError('Cuenta creada correctamente, pero hubo un problema al guardar datos adicionales. Puedes iniciar sesión.')
+                }
+            }
+
+            // 3. Redirigir al usuario después del registro exitoso
             router.push('/')
             router.refresh()
         } catch (error: any) {

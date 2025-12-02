@@ -1,0 +1,248 @@
+/**
+ * Estilos para la página de historial de compras
+ */
+
+.page {
+    min-height: calc(100vh - 80px);
+    padding: var(--spacing-3xl) var(--spacing-lg);
+    background: linear-gradient(180deg, var(--gray-50) 0%, white 50%);
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.title {
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 900;
+    margin-bottom: var(--spacing-2xl);
+    background: linear-gradient(135deg, var(--primary-600), var(--accent-500));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 50vh;
+    color: var(--text-secondary);
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--gray-200);
+    border-top-color: var(--primary-600);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--spacing-md);
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.successAlert {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-lg);
+    background: #d1fae5;
+    border: 1px solid #6ee7b7;
+    border-radius: var(--border-radius-md);
+    color: #065f46;
+    margin-bottom: var(--spacing-xl);
+    font-weight: 500;
+    animation: slideIn 0.4s ease-out;
+}
+
+.successAlert svg {
+    width: 24px;
+    height: 24px;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-3xl);
+    text-align: center;
+    background: white;
+    border-radius: var(--border-radius-xl);
+    box-shadow: var(--shadow-md);
+}
+
+.emptyState svg {
+    width: 80px;
+    height: 80px;
+    color: var(--gray-300);
+    margin-bottom: var(--spacing-lg);
+}
+
+.emptyState h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.emptyState p {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-xl);
+}
+
+.btnPrimary {
+    display: inline-block;
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: linear-gradient(135deg, var(--primary-600), var(--accent-500));
+    color: white;
+    text-decoration: none;
+    border-radius: var(--border-radius-md);
+    font-weight: 600;
+    transition: all var(--transition-base);
+}
+
+.btnPrimary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.purchasesList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.purchaseCard {
+    display: flex;
+    background: white;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-base);
+    border: 1px solid var(--gray-100);
+}
+
+.purchaseCard:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.purchaseImage {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.purchaseDetails {
+    flex: 1;
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+}
+
+.purchaseName {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.purchaseDate {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.purchaseInfo {
+    display: flex;
+    gap: var(--spacing-xl);
+}
+
+.infoItem {
+    display: flex;
+    flex-direction: column;
+}
+
+.infoLabel {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.infoValue {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.status {
+    position: absolute;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--border-radius-full);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.statusCompleted {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.statusPending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.statusCancelled {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .purchaseCard {
+        flex-direction: column;
+    }
+
+    .purchaseImage {
+        width: 100%;
+        height: 150px;
+    }
+
+    .purchaseDetails {
+        padding: var(--spacing-lg);
+    }
+
+    .status {
+        position: static;
+        align-self: flex-start;
+        margin-top: var(--spacing-md);
+    }
+}

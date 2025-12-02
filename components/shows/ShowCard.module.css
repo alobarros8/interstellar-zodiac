@@ -73,6 +73,7 @@
     margin-bottom: var(--spacing-lg);
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
@@ -101,6 +102,15 @@
 .buyButton:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-lg);
+}
+
+.buyButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.buttonAdded {
+    background: var(--success);
 }
 
 /* Responsive */

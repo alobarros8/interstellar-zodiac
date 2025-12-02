@@ -109,9 +109,19 @@ export default function Header() {
                     <div className={styles.authButtons}>
                         {user ? (
                             <div className={styles.userMenu}>
-                                <span className={styles.userName}>
-                                    {user.user_metadata?.name || user.email}
-                                </span>
+                                <div className={styles.userInfo}>
+                                    <span className={styles.userName}>
+                                        {user.user_metadata?.name || user.email}
+                                    </span>
+                                    <div className={styles.userLinks}>
+                                        <Link href="/perfil" className={styles.userLink} onClick={() => setIsMenuOpen(false)}>
+                                            Perfil
+                                        </Link>
+                                        <Link href="/historial" className={styles.userLink} onClick={() => setIsMenuOpen(false)}>
+                                            Mis Compras
+                                        </Link>
+                                    </div>
+                                </div>
                                 <button onClick={handleLogout} className={styles.btnSecondary}>
                                     Cerrar Sesión
                                 </button>

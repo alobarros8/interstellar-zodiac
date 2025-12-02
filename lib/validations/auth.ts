@@ -11,6 +11,14 @@ import { z } from 'zod'
 const specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
 
 /**
+ * Esquema base para validación de contraseña
+ */
+export const passwordSchema = z
+    .string()
+    .min(10, 'La contraseña debe tener al menos 10 caracteres')
+    .regex(specialCharRegex, 'La contraseña debe contener al menos un símbolo especial')
+
+/**
  * Esquema de validación para el formulario de registro
  * Requisitos:
  * - Nombre: mínimo 2 caracteres
@@ -21,10 +29,7 @@ const specialCharRegex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/
 export const registerSchema = z.object({
     name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
     email: z.string().email('Email inválido'),
-    password: z
-        .string()
-        .min(10, 'La contraseña debe tener al menos 10 caracteres')
-        .regex(specialCharRegex, 'La contraseña debe contener al menos un símbolo especial'),
+    password: passwordSchema,
     confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
     message: 'Las contraseñas no coinciden',

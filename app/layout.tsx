@@ -6,6 +6,8 @@
 import type { Metadata } from 'next'
 import { Inter, Playfair_Display } from 'next/font/google'
 import Header from '@/components/layout/Header'
+import CartButton from '@/components/cart/CartButton'
+import { CartProvider } from '@/contexts/CartContext'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
@@ -24,8 +26,11 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={`${inter.variable} ${playfair.variable}`}>
-        <Header />
-        <main>{children}</main>
+        <CartProvider>
+          <Header />
+          <main>{children}</main>
+          <CartButton />
+        </CartProvider>
       </body>
     </html>
   )
