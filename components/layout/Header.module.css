@@ -1,0 +1,239 @@
+/**
+ * Estilos para el componente Header
+ * Diseño responsive con navegación móvil y animaciones
+ */
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-sm);
+}
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 80px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: transform var(--transition-base);
+}
+
+.logo:hover {
+    transform: scale(1.02);
+}
+
+.theaterName {
+    font-size: 1.75rem;
+    font-weight: 900;
+    margin: 0;
+    background: linear-gradient(135deg, var(--primary-600), var(--accent-500));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.menuButton {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 1001;
+}
+
+.menuIcon {
+    width: 25px;
+    height: 3px;
+    background: var(--primary-600);
+    border-radius: 3px;
+    transition: all var(--transition-base);
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xl);
+}
+
+.navList {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navLink {
+    font-weight: 500;
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-fast);
+    position: relative;
+}
+
+.navLink::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-600), var(--accent-500));
+    transform: translateX(-50%);
+    transition: width var(--transition-base);
+}
+
+.navLink:hover {
+    color: var(--primary-600);
+}
+
+.navLink:hover::after {
+    width: 80%;
+}
+
+.searchWrapper {
+    display: flex;
+    align-items: center;
+}
+
+.authButtons {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.userMenu {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.userName {
+    font-weight: 500;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.btnPrimary {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: linear-gradient(135deg, var(--primary-600), var(--accent-500));
+    color: white;
+    border-radius: var(--border-radius-full);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-sm);
+}
+
+.btnPrimary:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.btnSecondary {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: transparent;
+    color: var(--primary-600);
+    border: 2px solid var(--primary-600);
+    border-radius: var(--border-radius-full);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all var(--transition-base);
+}
+
+.btnSecondary:hover {
+    background: var(--primary-600);
+    color: white;
+}
+
+/* Responsive - Móvil */
+@media (max-width: 1024px) {
+    .menuButton {
+        display: flex;
+    }
+
+    .nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 300px;
+        height: 100vh;
+        background: white;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 100px var(--spacing-xl) var(--spacing-xl);
+        box-shadow: var(--shadow-xl);
+        transition: right var(--transition-slow);
+        gap: var(--spacing-xl);
+    }
+
+    .navOpen {
+        right: 0;
+    }
+
+    .navList {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+        width: 100%;
+    }
+
+    .navLink {
+        width: 100%;
+        display: block;
+    }
+
+    .searchWrapper {
+        width: 100%;
+    }
+
+    .authButtons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .userMenu {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+    }
+
+    .btnPrimary,
+    .btnSecondary {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+
+    .theaterName {
+        font-size: 1.5rem;
+    }
+
+    .nav {
+        width: 100%;
+        right: -100%;
+    }
+}

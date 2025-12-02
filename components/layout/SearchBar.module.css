@@ -1,0 +1,89 @@
+/**
+ * Estilos para el componente SearchBar
+ */
+
+.searchForm {
+    width: 100%;
+    max-width: 400px;
+}
+
+.searchContainer {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.searchInput {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    padding-right: 3rem;
+    border: 2px solid var(--gray-300);
+    border-radius: var(--border-radius-full);
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    background: white;
+    transition: all var(--transition-base);
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+}
+
+.searchInput::placeholder {
+    color: var(--gray-400);
+}
+
+.searchButton {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-600), var(--accent-500));
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.searchButton:hover {
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: var(--shadow-md);
+}
+
+.searchIcon {
+    width: 18px;
+    height: 18px;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .searchForm {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .searchInput {
+        font-size: 0.9rem;
+        padding: var(--spacing-sm) var(--spacing-md);
+        padding-right: 2.8rem;
+    }
+
+    .searchButton {
+        width: 32px;
+        height: 32px;
+    }
+
+    .searchIcon {
+        width: 16px;
+        height: 16px;
+    }
+}

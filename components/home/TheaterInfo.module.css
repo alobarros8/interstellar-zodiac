@@ -1,0 +1,129 @@
+/**
+ * Estilos para el componente TheaterInfo
+ */
+
+.theaterInfo {
+    width: 100%;
+}
+
+.infoGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-3xl);
+}
+
+.infoCard {
+    display: flex;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-xl);
+    background: white;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+    animation: fadeIn 0.6s ease-out;
+}
+
+.infoCard:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+
+.iconWrapper {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-100), var(--accent-100));
+    border-radius: var(--border-radius-lg);
+}
+
+.iconWrapper svg {
+    width: 28px;
+    height: 28px;
+    color: var(--primary-600);
+}
+
+.infoContent {
+    flex: 1;
+}
+
+.infoTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.infoText {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: var(--spacing-xs);
+    line-height: 1.5;
+}
+
+.socialLinks {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.socialLink {
+    color: var(--primary-600);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: color var(--transition-fast);
+}
+
+.socialLink:hover {
+    color: var(--primary-700);
+    text-decoration: underline;
+}
+
+.historySection {
+    padding: var(--spacing-2xl);
+    background: linear-gradient(135deg, var(--primary-50), var(--accent-50));
+    border-radius: var(--border-radius-xl);
+    animation: fadeIn 0.8s ease-out;
+}
+
+.historyTitle {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-lg);
+    text-align: center;
+}
+
+.historyText {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: justify;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .infoGrid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+    }
+
+    .infoCard {
+        padding: var(--spacing-lg);
+    }
+
+    .historySection {
+        padding: var(--spacing-xl);
+    }
+
+    .historyText {
+        text-align: left;
+        font-size: 1rem;
+    }
+}
