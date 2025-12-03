@@ -5,7 +5,7 @@
 import { createClient } from '@/lib/supabase/client'
 
 const supabase = createClient()
-const BUCKET_NAME = 'function-images'
+const BUCKET_NAME = 'Imagenes funciones'
 const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg']
 

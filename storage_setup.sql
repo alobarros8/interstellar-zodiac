@@ -6,7 +6,7 @@
 
 -- IMPORTANTE: Antes de ejecutar este script, debes:
 -- 1. Ir a Storage en Supabase Dashboard
--- 2. Crear un bucket llamado: function-images
+-- 2. Crear un bucket llamado: Imagenes funciones
 -- 3. Configurarlo como PÚBLICO
 -- 4. Luego ejecutar este script
 
@@ -18,14 +18,14 @@
 CREATE POLICY "Public can view function images"
 ON storage.objects FOR SELECT
 TO public
-USING (bucket_id = 'function-images');
+USING (bucket_id = 'Imagenes funciones');
 
 -- Permitir a ADMINS subir imágenes
 CREATE POLICY "Admins can upload function images"
 ON storage.objects FOR INSERT
 TO authenticated
 WITH CHECK (
-  bucket_id = 'function-images' 
+  bucket_id = 'Imagenes funciones' 
   AND public.is_admin()
 );
 
@@ -33,13 +33,13 @@ WITH CHECK (
 CREATE POLICY "Admins can update function images"
 ON storage.objects FOR UPDATE
 TO authenticated
-USING (bucket_id = 'function-images' AND public.is_admin());
+USING (bucket_id = 'Imagenes funciones' AND public.is_admin());
 
 -- Permitir a ADMINS eliminar imágenes
 CREATE POLICY "Admins can delete function images"
 ON storage.objects FOR DELETE
 TO authenticated
-USING (bucket_id = 'function-images' AND public.is_admin());
+USING (bucket_id = 'Imagenes funciones' AND public.is_admin());
 
 -- ============================================
 -- VERIFICACIÓN

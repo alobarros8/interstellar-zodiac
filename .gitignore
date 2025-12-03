@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# sql
+add_function_features.sql   
+admin_migration.sql 
+complete_admin_setup.sql 
+storage_setup.sql
+ 

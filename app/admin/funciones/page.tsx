@@ -9,16 +9,11 @@ import { useState, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useForm } from 'react-hook-form'
 import { uploadFunctionImage, validateImageFile } from '@/lib/upload-helpers'
+import { type TheatreFunction, type FunctionFormData, getCuposDisponibles, getStatusColor, getStatusLabel, formatFecha, formatHora } from '@/types/theatre'
 import styles from '../admin.module.css'
 
-type FunctionFormData = {
-    nombre_funcion: string
-    descripcion_funcion: string
-    valor_entrada_funcion: number
-}
-
 export default function AdminFunctionsPage() {
-    const [functions, setFunctions] = useState<any[]>([])
+    const [functions, setFunctions] = useState<TheatreFunction[]>([])
     const [loading, setLoading] = useState(true)
     const [isCreating, setIsCreating] = useState(false)
     const [imageFile, setImageFile] = useState<File | null>(null)
@@ -33,7 +28,7 @@ export default function AdminFunctionsPage() {
         const { data } = await supabase
             .from('theatre_functions')
             .select('*')
-            .order('id', { ascending: false })
+            .order('fecha_funcion', { ascending: true })
 
         if (data) setFunctions(data)
         setLoading(false)
@@ -169,6 +164,60 @@ export default function AdminFunctionsPage() {
                             style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '0.25rem' }}
                         />
 
+                        {/* Fecha y Hora */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+                                    Fecha de la función *
+                                </label>
+                                <input
+                                    type="date"
+                                    {...register('fecha_funcion', { required: true })}
+                                    style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '0.25rem', width: '100%' }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+                                    Hora *
+                                </label>
+                                <input
+                                    type="time"
+                                    {...register('hora_funcion', { required: true })}
+                                    style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '0.25rem', width: '100%' }}
+                                />
+                            </div>
+                        </div>
+
+                        {/* Capacidad y Estado */}
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+                                    Capacidad (asientos) *
+                                </label>
+                                <input
+                                    type="number"
+                                    {...register('capacidad_total', { required: true, min: 1 })}
+                                    placeholder="100"
+                                    min="1"
+                                    style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '0.25rem', width: '100%' }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
+                                    Estado *
+                                </label>
+                                <select
+                                    {...register('estado', { required: true })}
+                                    style={{ padding: '0.5rem', border: '1px solid #ccc', borderRadius: '0.25rem', width: '100%' }}
+                                >
+                                    <option value="activo">Activo</option>
+                                    <option value="suspendido">Suspendido</option>
+                                    <option value="agotado">Agotado</option>
+                                    <option value="finalizado">Finalizado</option>
+                                </select>
+                            </div>
+                        </div>
+
                         {/* Input de imagen */}
                         <div>
                             <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '500' }}>
@@ -224,17 +273,66 @@ export default function AdminFunctionsPage() {
 
             <div style={{ display: 'grid', gap: '1rem' }}>
                 {functions.map((func) => (
-                    <div key={func.id} style={{ background: 'white', padding: '1rem', borderRadius: '0.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                            <img src={func.imagen_funcion} alt="" style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '0.25rem' }} />
-                            <div>
-                                <h3 style={{ margin: 0 }}>{func.nombre_funcion}</h3>
-                                <p style={{ margin: 0, color: '#666' }}>${func.valor_entrada_funcion}</p>
+                    <div key={func.id} style={{ background: 'white', padding: '1.5rem', borderRadius: '0.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <div style={{ display: 'flex', gap: '1rem', flex: 1 }}>
+                            <img src={func.imagen_funcion} alt="" style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '0.375rem' }} />
+                            <div style={{ flex: 1 }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                                    <h3 style={{ margin: 0, fontSize: '1.125rem' }}>{func.nombre_funcion}</h3>
+                                    <span style={{
+                                        padding: '0.25rem 0.75rem',
+                                        borderRadius: '9999px',
+                                        fontSize: '0.75rem',
+                                        fontWeight: '600',
+                                        background: getStatusColor(func.estado) + '20',
+                                        color: getStatusColor(func.estado)
+                                    }}>
+                                        {getStatusLabel(func.estado).toUpperCase()}
+                                    </span>
+                                </div>
+
+                                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, auto)', gap: '1.5rem', marginTop: '0.75rem', fontSize: '0.875rem', color: '#666' }}>
+                                    <div>
+                                        <div style={{ fontWeight: '500', color: '#000', marginBottom: '0.25rem' }}>
+                                            📅 {formatFecha(func.fecha_funcion)}
+                                        </div>
+                                        <div style={{ fontSize: '0.8125rem' }}>
+                                            🕐 {formatHora(func.hora_funcion)}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div style={{ fontWeight: '500', color: '#000', marginBottom: '0.25rem' }}>
+                                            💵 ${func.valor_entrada_funcion}
+                                        </div>
+                                        <div style={{ fontSize: '0.8125rem' }}>
+                                            Precio entrada
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div style={{ fontWeight: '500', color: '#000', marginBottom: '0.25rem' }}>
+                                            🎟️ {func.entradas_vendidas} / {func.capacidad_total}
+                                        </div>
+                                        <div style={{ fontSize: '0.8125rem' }}>
+                                            {getCuposDisponibles(func)} disponibles
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div style={{ fontWeight: '500', color: '#000', marginBottom: '0.25rem' }}>
+                                            📊 {func.capacidad_total > 0 ? Math.round((func.entradas_vendidas / func.capacidad_total) * 100) : 0}%
+                                        </div>
+                                        <div style={{ fontSize: '0.8125rem' }}>
+                                            Ocupación
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <button
                             onClick={() => handleDelete(func.id)}
-                            style={{ padding: '0.5rem', background: '#fee2e2', color: '#991b1b', border: 'none', borderRadius: '0.25rem', cursor: 'pointer' }}
+                            style={{ padding: '0.5rem 0.75rem', background: '#fee2e2', color: '#991b1b', border: 'none', borderRadius: '0.375rem', cursor: 'pointer', fontWeight: '500', fontSize: '0.875rem' }}
                         >
                             Eliminar
                         </button>

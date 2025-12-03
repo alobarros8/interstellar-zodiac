@@ -91,7 +91,49 @@ CREATE POLICY "Admins can view all purchases"
   USING (public.is_admin());
 
 -- ============================================
--- 5. ASIGNAR ROL DE ADMIN AL USUARIO
+-- 5. CONFIGURAR RLS EN TABLA USERS
+-- ============================================
+
+-- Habilitar RLS
+ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
+
+-- Limpiar políticas viejas
+DROP POLICY IF EXISTS "Users can view own data" ON public.users;
+DROP POLICY IF EXISTS "Users can update own data" ON public.users;
+DROP POLICY IF EXISTS "Users can insert own data" ON public.users;
+DROP POLICY IF EXISTS "Admins can view all users" ON public.users;
+
+-- Permitir a usuarios autenticados INSERTAR su propio registro (para registro)
+CREATE POLICY "Users can insert own data"
+  ON public.users
+  FOR INSERT
+  TO authenticated
+  WITH CHECK (auth.uid() = user_id);
+
+-- Permitir a usuarios VER su propio registro
+CREATE POLICY "Users can view own data"
+  ON public.users
+  FOR SELECT
+  TO authenticated
+  USING (auth.uid() = user_id);
+
+-- Permitir a usuarios ACTUALIZAR su propio registro
+CREATE POLICY "Users can update own data"
+  ON public.users
+  FOR UPDATE
+  TO authenticated
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
+-- Permitir a ADMINS ver todos los usuarios
+CREATE POLICY "Admins can view all users"
+  ON public.users
+  FOR SELECT
+  TO authenticated
+  USING (public.is_admin());
+
+-- ============================================
+-- 6. ASIGNAR ROL DE ADMIN AL USUARIO
 -- ============================================
 
 -- Actualizar el usuario específico
@@ -100,7 +142,7 @@ SET role = 'admin'
 WHERE email_user = 'alobarros8@gmail.com';
 
 -- ============================================
--- 6. VERIFICACIÓN
+-- 7. VERIFICACIÓN
 -- ============================================
 
 -- Ver usuarios con rol admin
