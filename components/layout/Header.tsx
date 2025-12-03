@@ -24,6 +24,7 @@ const THEATER_NAME = 'Teatro Estrella'
 export default function Header() {
     const [user, setUser] = useState<any>(null)
     const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [userRole, setUserRole] = useState<string | null>(null)
     const router = useRouter()
     const supabase = createClient()
 
@@ -34,12 +35,31 @@ export default function Header() {
         const checkUser = async () => {
             const { data: { session } } = await supabase.auth.getSession()
             setUser(session?.user ?? null)
+
+            if (session?.user) {
+                const { data } = await supabase
+                    .from('users')
+                    .select('role')
+                    .eq('user_id', session.user.id)
+                    .single()
+                setUserRole(data?.role || null)
+            }
         }
         checkUser()
 
         // Escucha cambios en el estado de autenticación
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
             setUser(session?.user ?? null)
+            if (session?.user) {
+                const { data } = await supabase
+                    .from('users')
+                    .select('role')
+                    .eq('user_id', session.user.id)
+                    .single()
+                setUserRole(data?.role || null)
+            } else {
+                setUserRole(null)
+            }
         })
 
         return () => subscription.unsubscribe()
@@ -50,6 +70,7 @@ export default function Header() {
      */
     const handleLogout = async () => {
         await supabase.auth.signOut()
+        setUserRole(null)
         router.push('/')
         router.refresh()
     }
@@ -114,6 +135,11 @@ export default function Header() {
                                         {user.user_metadata?.name || user.email}
                                     </span>
                                     <div className={styles.userLinks}>
+                                        {userRole === 'admin' && (
+                                            <Link href="/admin" className={styles.userLink} style={{ color: '#dc2626', fontWeight: 'bold' }} onClick={() => setIsMenuOpen(false)}>
+                                                Panel Admin
+                                            </Link>
+                                        )}
                                         <Link href="/perfil" className={styles.userLink} onClick={() => setIsMenuOpen(false)}>
                                             Perfil
                                         </Link>

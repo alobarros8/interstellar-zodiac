@@ -24,22 +24,35 @@ export default function AdminLayout({
 
     useEffect(() => {
         async function checkAdmin() {
+            console.log('Verificando permisos de admin...')
             const { data: { user } } = await supabase.auth.getUser()
 
             if (!user) {
+                console.log('No hay usuario autenticado')
                 router.push('/login')
                 return
             }
 
+            console.log('Usuario autenticado:', user.id)
+
             // Verificar rol en tabla users
-            const { data: userData } = await supabase
+            const { data: userData, error } = await supabase
                 .from('users')
                 .select('role')
                 .eq('user_id', user.id)
                 .single()
 
+            console.log('Datos de usuario (DB):', userData)
+            console.log('Error (DB):', error)
+
+            if (error || !userData) {
+                alert('Error: No se encontró tu usuario en la base de datos pública. Revisa la consola.')
+                return
+            }
+
             if (userData?.role !== 'admin') {
-                router.push('/') // No es admin, fuera
+                alert(`Acceso denegado. Tu rol es: ${userData?.role || 'ninguno'}. Se requiere: admin`)
+                // router.push('/') // Comentado para debug
                 return
             }
 
