@@ -46,6 +46,18 @@ export default function CartPage() {
                 status: 'completed' as const
             }))
 
+            const { error: purchaseError } = await supabase
+                .from('purchases')
+                .insert(purchases)
+
+            if (purchaseError) throw purchaseError
+
+            // Limpiar el carrito
+            clearCart()
+
+            // Redirigir al historial de compras
+            router.push('/historial?success=true')
+        } catch (err: any) {
             console.error('Error al procesar compra:', err)
             setError(err.message || 'Error al procesar la compra')
         } finally {
